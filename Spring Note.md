@@ -1,0 +1,13 @@
+- `SpringIOC` 
+  - `ioc容器` 是 `Spring` 对依赖控制反转的一种实现，它可以在对象创建或初始化的时候将数据注入到对象中，或者直接注入到对象的数据域中，它把对象间的依赖有序的建立起来，降低代码耦合度
+- `BeanFactory FactoryBean`
+  - 所有的`Bean`都是由`BeanFactory`（也就是`IOC容器`）管理的
+  - `FactoryBean`是一个特殊的`Bean`，能产生或修饰对象生成的工厂`Bean`
+- `IOC`初始化流程
+  - 分为三步， 第一步 `BeanDefinition`的`Resource资源`的定位，可以来自`FileSystem, ClassPath 或是 Web容器`，以打水这个行为举例，这步就是找到水源
+  - 第二步，`BeanDefinition`的载入，把用户定义好的`Bean`表示成`Ioc`容器的内部数据结构，这个数据结构就是`BeanDefinition`
+  - 第三步，`BeanDefinition`的注册，第二步的载入只是写入了一些静态的配置信息，严格来讲容器还没有完全起作用， 需要将`BeanDefinition`注册到一个`HashMap`中
+  - 注册完成后初始化流程就完成了
+  - 初始化过程主要是在`Ioc`容器中建立`BeanDefinition`的数据映射，而`Bean`之间的依赖关系还要依靠后面的依赖注入过程，当然如果指定了`lazy-init`属性，初始化过程会对`Bean`进行预实例化，这个实例化也是一个完成依赖注入的过程
+  - 依赖注入一般是在用户首次向`Ioc容器`索要对象时触发，也就是调用了`getBean`方法，该方法中会获取当前`Bean`依赖的其他`Bean`，触发`getBean`的递归调用，最后返回一个依赖注入完成后的`Bean`
+
