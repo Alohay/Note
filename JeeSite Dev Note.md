@@ -80,4 +80,4 @@ select
 - `GetConnectionTimeoutException: maxActive 20, runningSQLCount:19`
   - 猜想可能是查询`SQL`写的太臭导致超时，但是将报错的`SQL`放到命令行执行的时候，返回结果很快，并不耗时
   - 猜想可能是框架没有释放`SQL`连接资源
-
+  - 也有可能是`SQL` 返回结果比较复杂，`Mybatis` 在注入的时候耗时过长（不太可能，因为感觉并不复杂）
