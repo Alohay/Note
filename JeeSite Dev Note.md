@@ -44,7 +44,7 @@ select
             on a.id = b.activity_detail_id and b.appeared_status = 1
         group by a.activity_name, a.activity_status
         
-# 改成子查询, 运用索引(id, phone), b+树结构, 先按第一个字段排序, 再按第二个字段排序
+# left join 改成子查询, 运用索引(id, phone), b+树结构, 先按第一个字段排序, 再按第二个字段排序
 select
           activity_name,
           activity_status,
@@ -54,10 +54,14 @@ select
            where b.activity_detail_id = a.id and b.appeared_status = 1)
 
         from act_activity_detail a
-
-
-
 ```
+
+- **子查询慢查优化** 
+  - 有一个包含子查询的查询超时，
+  - `exlpain`发现使用了全表扫描 `filesort` 而子查询 `DEPENDENT SUBQUERY` 依赖父查询的查询结果
+  - 尝试将子查询改成与临时表链接查询，那要用到`LEFT JOIN`，签到人数为`0`的话，子查询结果集中不会出现活动相应的`id`
+  - 拆开来查询，业务要求查询出活动详情及其相关的签到人数
+  - `reference:`[慢查优化慎用MySQL子查询，尤其是看到DEPENDENT SUBQUERY标记时](https://www.cnblogs.com/zhengyun_ustc/p/slowquery3.html) ，[MySQL · 性能优化 · 条件下推到物化表](http://mysql.taobao.org/monthly/2016/07/08/)
 
 
 
@@ -75,9 +79,6 @@ select
 
 
 
-##### SQL
+##### 数据库
 
-- `GetConnectionTimeoutException: maxActive 20, runningSQLCount:19`
-  - 猜想可能是查询`SQL`写的太臭导致超时，但是将报错的`SQL`放到命令行执行的时候，返回结果很快，并不耗时
-  - 猜想可能是框架没有释放`SQL`连接资源
-  - 也有可能是`SQL` 返回结果比较复杂，`Mybatis` 在注入的时候耗时过长（不太可能，因为感觉并不复杂）
+- 注意 `enum`类型存储的是 `'1'`字符，而不是 数字`1`
