@@ -22,17 +22,11 @@
 
 
 
-##### 登录流程
+##### 数据库优化
 
-- `FormAuthenticationFilter.createToken(request, response)`
-  - 通过解析`request`获取用户名密码，设置到返回的`token`中
-- 调用`SecurityUtils.getSubject().login(token)`
-  - 没抛`AuthenticationException` 就登陆成功
-  - 目前先自己手动控制跳转页面吧
-
-
-
-##### SQL查询优化
+- **表结构优化**
+  - 活动详情表，活动状态，由`enum`改成另一张状态表的外键，便于活动状态的增加或修改，提高可扩展性
+- **`SQL`查询优化**
 
 ``` sql
 # 全表扫描, filesort, 临时表（temporary）, 嵌套循环
@@ -57,7 +51,7 @@ select
 ```
 
 - **子查询慢查优化** 
-  - 有一个包含子查询的查询超时，
+  - 上文优化后的`SQL`带上排序，筛选条件后超时
   - `exlpain`发现使用了全表扫描 `filesort` 而子查询 `DEPENDENT SUBQUERY` 依赖父查询的查询结果
   - 尝试将子查询改成与临时表链接查询，那要用到`LEFT JOIN`，签到人数为`0`的话，子查询结果集中不会出现活动相应的`id`
   - 拆开来查询，业务要求查询出活动详情及其相关的签到人数
@@ -82,3 +76,8 @@ select
 ##### 数据库
 
 - 注意 `enum`类型存储的是 `'1'`字符，而不是 数字`1`
+
+##### 扫码
+
+- 奇怪的问题，浏览器（设置了`UA=PC`）扫描二维码可以成功跳转，微信扫描扫描却报错`404`
+- `Jeesite`有一个`mobileInterceptor`拦截器实现了`postHandle`，通过`UA`判断，如果是手机则在`view`前加上一个`mobile/`路径
