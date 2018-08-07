@@ -81,3 +81,11 @@ select
 
 - 奇怪的问题，浏览器（设置了`UA=PC`）扫描二维码可以成功跳转，微信扫描扫描却报错`404`
 - `Jeesite`有一个`mobileInterceptor`拦截器实现了`postHandle`，通过`UA`判断，如果是手机则在`view`前加上一个`mobile/`路径
+
+##### 服务器部署
+
+- `Could not initialize class sun.awt.X11GraphicsEnvironment `
+- 在环境变量中配置 ` export JAVA_OPTS="-Djava.awt.headless=true" `
+- `headless`模式
+  - 该模式下，系统缺少了显示设备、键盘或鼠标，依靠系统的计算能力来模拟这些特性
+
