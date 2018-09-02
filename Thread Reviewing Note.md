@@ -132,3 +132,4 @@
   - `ScheduledThreadPoolExecutor`
     - `ScheduledThreadPoolExecutor`，适合多个线程后台执行任务
     - 又可细分出`SingleThreadPoolExecutor`，适合单个线程执行任务且需要保证任务顺序执行
+
