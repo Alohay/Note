@@ -66,7 +66,7 @@
 
 ##### 先行发生原则
 
-- 一个线程中，控制流在前的县发生于后面的操作
+- 一个线程中，控制流在前的先发生于后面的操作
 - `unlock`先行发生于后面对同一个锁的`lock`
 - `volatile`的写先行发生于读
 - 线程的`start`先行发生于线程的其他动作
@@ -132,4 +132,8 @@
   - `ScheduledThreadPoolExecutor`
     - `ScheduledThreadPoolExecutor`，适合多个线程后台执行任务
     - 又可细分出`SingleThreadPoolExecutor`，适合单个线程执行任务且需要保证任务顺序执行
+
+##### yield
+
+- 暗示调度器当前线程愿意让出`cpu`，允许调度器忽略该暗示，就算调度器接受了，仍然有可能再次选择这个线程运行
 
